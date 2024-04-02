@@ -15,3 +15,5 @@ Install packages,
 Run node app,
 
 `npm run dev`
+
+This will run at `http://localhost:5173/`
