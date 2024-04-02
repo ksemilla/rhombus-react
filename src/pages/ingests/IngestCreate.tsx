@@ -44,6 +44,7 @@ export function IngestCreate() {
       let offset = 0
 
       while (offset < fileSize) {
+        console.log("Start")
         const chunk = selectedFile.slice(offset, offset + CHUNK_SIZE)
         const formData = new FormData()
         formData.append("file", chunk)
@@ -65,14 +66,19 @@ export function IngestCreate() {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
-              onUploadProgress: () => {
-                const progress = Math.round((offset / fileSize) * 100)
-                setUploadProgress(progress > 100 ? 100 : progress)
+              onUploadProgress: (progressEvent) => {
+                const tprogress = Math.round(
+                  (offset + progressEvent.loaded / fileSize) * 100
+                )
+                const progress = tprogress > 100 ? 100 : tprogress
+                setUploadProgress(progress)
               },
             }
           )
+
           ingestId = response.data.ingest_id
           offset += CHUNK_SIZE
+          console.log(response.data)
           if (response.data.status === "processing") {
             navigate(`/ingests/${response.data.ingest_id}`)
           }

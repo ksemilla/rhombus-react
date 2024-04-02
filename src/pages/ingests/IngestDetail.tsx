@@ -21,12 +21,6 @@ function RenderHeaders(props: { columns: IngestColumn[]; ingest: Ingest }) {
         (res) => res.data
       )
     },
-    onSuccess: (data) => {
-      console.log(data)
-    },
-    onError: (error) => {
-      console.log(error)
-    },
   })
 
   return (
@@ -58,7 +52,7 @@ function RenderHeaders(props: { columns: IngestColumn[]; ingest: Ingest }) {
               <option value="int32">Int32</option>
               <option value="int64">Int64</option>
               <option value="float32">Float32</option>
-              <option value="flost64">Float64</option>
+              <option value="float64">Float64</option>
               <option value="bool">Boolean</option>
               <option value="datetime64[ns]">Date Time</option>
               <option value="category">Category</option>
@@ -78,7 +72,6 @@ function renderBody(
   records: { items: IngestRecord[]; count: number },
   columns: IngestColumn[]
 ) {
-  console.log(records)
   return (
     <tbody className="divide-y divide-gray-200">
       {records.items.map((record) => (
@@ -162,6 +155,11 @@ export function IngestDetail() {
     },
   })
 
+  const currPageCount =
+    (ingestRecords?.count ?? 0) < page * 20
+      ? ingestRecords?.count ?? 0
+      : page * 20
+
   return !ingest || !ingestRecords ? (
     <div>Loading...</div>
   ) : (
@@ -220,7 +218,7 @@ export function IngestDetail() {
             </button>
             <button
               className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-              disabled={ingestRecords.count - (page + 1) * 20 <= 0}
+              disabled={currPageCount === ingestRecords.count}
               onClick={handleNext}
             >
               Next

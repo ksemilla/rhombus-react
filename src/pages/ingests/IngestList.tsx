@@ -75,6 +75,9 @@ export function IngestList() {
     },
   })
 
+  const currPageCount =
+    (data?.count ?? 0) < page * 20 ? data?.count ?? 0 : page * 20
+
   return !data ? (
     <div>Loading...</div>
   ) : data.count === 0 ? (
@@ -152,7 +155,7 @@ export function IngestList() {
                 </button>
                 <button
                   className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                  disabled={data.count - (page + 1) * 20 <= 0}
+                  disabled={currPageCount === data.count}
                   onClick={handleNext}
                 >
                   Next
